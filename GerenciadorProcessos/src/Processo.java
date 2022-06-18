@@ -1,14 +1,14 @@
 
 public class Processo implements Runnable{
 
-	private int id;
+	private static int id = 1;
 	private Estado estado;
 	private String info;
 	private int prioridade;
 	private int tempo_cpu;
 	
-	public Processo(int id, Estado estado, String info, int prioridade, int tempo_cpu) {
-		this.id = id;
+	public Processo(Estado estado, String info, int prioridade, int tempo_cpu) {
+		this.id++;
 		this.estado = estado;
 		this.info = info;
 		this.prioridade = prioridade;
@@ -18,18 +18,11 @@ public class Processo implements Runnable{
 	@Override
 	public void run() {
 		try {
-			if(Estado.READY == estado) {
-				Thread.sleep(3000);
-			}else if(Estado.RUNNING == estado) {
+			while(estado == Estado.READY) {
+				Thread.sleep(1);
+			}
+			if(Estado.RUNNING == estado) {
 				Thread.sleep(tempo_cpu);
-			}else if(Estado.WAITING == estado) {
-				
-			}else if(Estado.BLOCKED == estado) {
-				
-			}else if(Estado.TERMINATED == estado) {
-				
-			}else if(Estado.NEW == estado) {
-				
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -38,9 +31,6 @@ public class Processo implements Runnable{
 	
 	public int getId() {
 		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public Estado getEstado() {
 		return estado;
