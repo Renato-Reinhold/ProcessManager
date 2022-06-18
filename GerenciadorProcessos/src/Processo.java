@@ -1,42 +1,45 @@
 
-public class Processo implements Runnable{
+public class Processo extends Thread{
 
-	private static int id = 1;
-	private Estado estado;
+	private static int idG = 1;
+	private int id;
+	private Estado status;
 	private String info;
-	private int prioridade;
-	private int tempo_cpu;
+	private int ProcessPriority;
+	private int timeCPU;
 	
-	public Processo(Estado estado, String info, int prioridade, int tempo_cpu) {
-		this.id++;
-		this.estado = estado;
+	public Processo(Estado estado, String info, int tempo_cpu) {
+		this.id = idG++;
+		this.status = estado;
 		this.info = info;
-		this.prioridade = prioridade;
-		this.tempo_cpu = tempo_cpu;
+		this.timeCPU = tempo_cpu;
 	}
 
 	@Override
 	public void run() {
 		try {
-			while(estado == Estado.READY) {
-				Thread.sleep(1);
-			}
-			if(Estado.RUNNING == estado) {
-				Thread.sleep(tempo_cpu);
+			while(status != Estado.TERMINATED) {
+				if(status == Estado.READY) {
+					//System.out.println("Processo " + getId() + " pronto para execução.");
+					Thread.sleep((long) (Math.random() * 1000));
+				}
+				if(Estado.RUNNING == status) {
+					Thread.sleep(timeCPU);
+				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public Estado getEstado() {
-		return estado;
+	public Estado getStatus() {
+		return status;
 	}
-	public void setEstado(Estado estado) {
-		this.estado = estado;
+	public void setStatus(Estado estado) {
+		this.status = estado;
 	}
 	public String getInfo() {
 		return info;
@@ -44,19 +47,19 @@ public class Processo implements Runnable{
 	public void setInfo(String info) {
 		this.info = info;
 	}
-	public int getPrioridade() {
-		return prioridade;
+	public int getTimeCPU() {
+		return timeCPU;
 	}
-	public void setPrioridade(int prioridade) {
-		this.prioridade = prioridade;
+	public void setTimeCPU(int tempo_cpu) {
+		this.timeCPU = tempo_cpu;
 	}
-	public int getTempo_cpu() {
-		return tempo_cpu;
+
+	public int getProcessPriority() {
+		return ProcessPriority;
 	}
-	public void setTempo_cpu(int tempo_cpu) {
-		this.tempo_cpu = tempo_cpu;
+
+	public void setProcessPriority(int processPriority) {
+		ProcessPriority = processPriority;
 	}
-	
-	
 	
 }

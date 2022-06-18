@@ -1,54 +1,34 @@
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Stack;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-public class Checker implements Runnable{
+public class Checker extends Thread{
 
-	private Random random = new Random();
-	private static Vector<Processo> running = new Stack<Processo>();
-	private static Vector<Processo> waiting = new Stack<Processo>();
-	private static Vector<Processo> ready = new Stack<Processo>();
-	private static Queue<Processo> news = new PriorityQueue<Processo>();
+	private Map<Integer, Processo> running;
+	private Map<Integer, Processo> waiting;
+	private Map<Processo, Integer> ready;
+	
+	public Checker(Map<Processo, Integer> ready) {
+		this.ready = ready;
+	}
 	
 	@Override
 	public void run() {
-		Processo current = news.poll();
-		if(current.getEstado() == Estado.NEW) {
-			
-		}
-	}
-	
-	private int gerarPossibilidadeBloqueio() {
+		List<Entry<Processo, Integer>> list = new ArrayList<>(ready.entrySet());
+		list.sort(Entry.comparingByValue());
+		list.forEach(System.out::println);
 		
-		return 0;
 	}
 
-	public static Vector<Processo> getRunning() {
-		return running;
-	}
-
-	public static void setRunning(Vector<Processo> running) {
-		Checker.running = running;
-	}
-
-	public static Vector<Processo> getWaiting() {
-		return waiting;
-	}
-
-	public static void setWaiting(Vector<Processo> waiting) {
-		Checker.waiting = waiting;
-	}
-
-	public static Vector<Processo> getReady() {
+	public Map<Processo, Integer> getReady() {
 		return ready;
 	}
 
-	public static void setReady(Vector<Processo> ready) {
-		Checker.ready = ready;
+	public void setReady(Map<Processo, Integer> ready) {
+		this.ready = ready;
 	}
+	
+	
 
-	
-	
 }
