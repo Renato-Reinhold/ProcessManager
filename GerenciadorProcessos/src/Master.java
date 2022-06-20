@@ -1,15 +1,16 @@
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 
 public class Master implements Runnable{
 
-	private static Map<Integer, Processo> running = new HashMap<Integer, Processo>();
-	private static Map<Integer, Processo> waiting = new HashMap<Integer, Processo>();
-	private static Map<Processo, Integer> ready = new HashMap<Processo, Integer>();
+	private Random r = new Random();
+	private static List<Processo> running = new ArrayList<Processo>();
+	private static List<Processo> waiting = new ArrayList<Processo>();
+	private static List<Processo> ready = new ArrayList<Processo>();
+	private static List<Processo> terminated = new ArrayList<Processo>();
 	private List<Processo> processos;
 	
 	public Master(List<Processo> processos) {
@@ -20,39 +21,34 @@ public class Master implements Runnable{
 	public void run() {
 		while(!processos.isEmpty()) {
 			Processo current = ((Stack<Processo>)processos).pop();
-			current.setProcessPriority(prioridadeRandom());
-			ready.put(current, current.getProcessPriority());
-			current.setStatus(Estado.READY);
-			current.start();
+			current.setProcessPriority(priorityRandom());
+			if(current.getStatus() == Estado.NEW) {
+				ready.add(current);
+				current.setStatus(Estado.READY);
+			}else {
+				waiting.add(current);
+			}
 		}
 		
-		Checker checker = new Checker(ready);
-		checker.run();
-		
-		System.out.println(Collections.singletonList(ready));
-		System.out.println(ready.size());
+		System.out.println(ready);
+		Checker checker = new Checker(ready, waiting, running, terminated);
+		checker.start();
 		
 	}
 	
-	public static int prioridadeRandom() {
-		int random = new Random().nextInt(50);
-		return random;
-	}
-	
-	private int gerarPossibilidadeBloqueio() {
-		
-		return 0;
+	public static int priorityRandom() {
+		return new Random().nextInt(50) + 1;
 	}
 
-	public static Map<Integer, Processo> getRunning() {
+	public static List<Processo> getRunning() {
 		return running;
 	}
 	
-	public static Map<Integer, Processo> getWaiting() {
+	public static List<Processo> getWaiting() {
 		return waiting;
 	}
 
-	public static Map<Processo, Integer> getReady() {
+	public static List<Processo> getReady() {
 		return ready;
 	}
 

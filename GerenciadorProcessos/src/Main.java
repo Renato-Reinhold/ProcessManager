@@ -8,16 +8,16 @@ public class Main {
 		
 		List<Processo> processos = new Stack<Processo>();
 		
-		Processo p1 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p2 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p3 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p4 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p5 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p6 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p7 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p8 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p9 = new Processo(Estado.NEW, "TEXTO", timeRandom());
-		Processo p10 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p1 = new Processo(Estado.NEW, "Executara um processo padrao", timeRandom());
+		Processo p2 = new Processo(Estado.NEW, "Requisição de um processo de I/O", timeRandom());
+		Processo p3 = new Processo(Estado.WAITING, "Aguardo da I/O que sera executado pelo proceso p2", timeRandom(), p2);
+		Processo p4 = new Processo(Estado.NEW, "TEXTO 6", timeRandom());
+		Processo p5 = new Processo(Estado.NEW, "TEXTO 5", timeRandom());
+		Processo p6 = new Processo(Estado.NEW, "Descrição aleatoria", timeRandom());
+		Processo p7 = new Processo(Estado.WAITING, "Esperando o processo p6 terminar de executar", timeRandom(), p6);
+		Processo p8 = new Processo(Estado.BLOCKED, "Bloqueado pelo processo p7", timeRandom());
+		Processo p9 = new Processo(Estado.NEW, "TEXTO 9", timeRandom());
+		Processo p10 = new Processo(Estado.NEW, "TEXTO 10", timeRandom());
 		processos.add(p1);
 		processos.add(p2);
 		processos.add(p3);
@@ -59,8 +59,7 @@ public class Main {
 	}
 	
 	public static int timeRandom() {
-		int random = new Random().nextInt(10);
-		return random;
+		return new Random().nextInt(10) + 1;
 	}
 	
 }
