@@ -5,79 +5,73 @@ import java.util.Random;
 
 public class Checker extends Thread{
 
-	private List<Processo> running;
-	private List<Processo> waiting;
-	private List<Processo> ready;
 	private List<Processo> terminated;
 	private final int SLICETIME = 2;
 	private Thread current;
 	
 	public Checker(List<Processo> ready, List<Processo> waiting, List<Processo> running, List<Processo> terminated) {
-		this.ready = ready;
-		this.waiting = waiting;
-		this.running = running;
 		this.terminated = terminated;
 	}
 	
 	@Override
 	public void run() {
 		dispath();
-		while(!ready.isEmpty()) {
+		while(!Master.getReady().isEmpty()) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(!waiting.isEmpty()) {
-				for (int i = 0; i < waiting.size(); i++) {
-					Processo p = waiting.get(i);
+			System.out.println(Master.getReady());
+			if(!Master.getWaiting().isEmpty()) {
+				for (int i = 0; i < Master.getWaiting().size(); i++) {
+					Processo p = Master.getWaiting().get(i);
 					if (p != null && terminated.contains(p.getDependent())) {
-						waiting.remove(i);
+						Master.getWaiting().remove(i);
 						wakeUp(p);
 					}
 				}
 			}
-			if(running.get(0) != null) {
-				Processo process = running.get(0);
-				System.out.println("processando: " + process);
-				if(process.getTimeCPU() <= 0 && !ready.isEmpty()) {
-					running.remove(0);
+			if(Master.getRunning().get(0) != null) {
+				Processo process = Master.getRunning().get(0);
+				
+				if(process.getTimeCPU() <= 0 && !Master.getReady().isEmpty()) {
+					Master.getRunning().remove(0);
 					dispath();
 					current.interrupt();
 					terminated.add(process);
 				}
-				if(process.getProcessTime() >= SLICETIME && !ready.isEmpty()) {
-					System.out.println("trocar processo");
+				if(process.getProcessTime() >= SLICETIME && !Master.getReady().isEmpty()) {
+					
 					timeRunOut(process);
 					dispath();
-					ready.add(process);
+					Master.getReady().add(process);
 				}
 			}
 		}
-		System.out.println("ready: "+ ready);
+		
 	}
 
 	private synchronized void timeRunOut(Processo p) {
-		running.remove(0);
+		Master.getRunning().remove(0);
 		p.setStatus(Estado.READY);
 		p.setProcessTime(0);
 		current.interrupt();
 	}
 	
 	public synchronized void dispath() {
-		Collections.sort(ready);
-		System.out.println(running);
-		System.out.println(ready);
-		Processo process = ready.get(0);
+		Collections.sort(Master.getReady());
+		Processo process = Master.getReady().get(0);
 		process.setStatus(Estado.RUNNING);
-		running.add(process);
-		ready.remove(0);
+		Master.getRunning().add(process);
+		Master.getReady().remove(0);
 		current = new Thread(process);
 		current.start();
 	}
 	
 	private synchronized void wakeUp(Processo p) {
-		ready.add(p);
+		Master.getReady().add(p);
 	}
 	
 	private boolean blocker(Processo p) {
@@ -86,31 +80,5 @@ public class Checker extends Thread{
 		int i = chances.get(r.nextInt(chances.size()));
 		return i == 1;
 	}
-	
-	public List<Processo> getRunning() {
-		return running;
-	}
-
-	public void setRunning(List<Processo> running) {
-		this.running = running;
-	}
-
-	public List<Processo> getWaiting() {
-		return waiting;
-	}
-
-	public void setWaiting(List<Processo> waiting) {
-		this.waiting = waiting;
-	}
-
-	public List<Processo> getReady() {
-		return ready;
-	}
-
-	public void setReady(List<Processo> ready) {
-		this.ready = ready;
-	}
-	
-	
 
 }

@@ -6,7 +6,6 @@ import java.util.Stack;
 
 public class Master implements Runnable{
 
-	private Random r = new Random();
 	private static List<Processo> running = new ArrayList<Processo>();
 	private static List<Processo> waiting = new ArrayList<Processo>();
 	private static List<Processo> ready = new ArrayList<Processo>();
@@ -30,11 +29,12 @@ public class Master implements Runnable{
 			}
 		}
 		
-		System.out.println(ready);
 		Checker checker = new Checker(ready, waiting, running, terminated);
 		checker.start();
 		
 	}
+	
+	
 	
 	public static int priorityRandom() {
 		return new Random().nextInt(50) + 1;
