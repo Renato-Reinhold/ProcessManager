@@ -1,13 +1,16 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Checker extends Thread{
 
 	private List<Processo> terminated;
 	private final int SLICETIME = 2;
-	private Thread current;
+	private Map<Processo ,Thread> threds = new HashMap<Processo, Thread>();
 	
 	public Checker(List<Processo> ready, List<Processo> waiting, List<Processo> running, List<Processo> terminated) {
 		this.terminated = terminated;
@@ -18,11 +21,8 @@ public class Checker extends Thread{
 		dispath();
 		while(!Master.getReady().isEmpty()) {
 			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {}
 			System.out.println(Master.getReady());
 			if(!Master.getWaiting().isEmpty()) {
 				for (int i = 0; i < Master.getWaiting().size(); i++) {
@@ -35,15 +35,13 @@ public class Checker extends Thread{
 			}
 			if(Master.getRunning().get(0) != null) {
 				Processo process = Master.getRunning().get(0);
-				
 				if(process.getTimeCPU() <= 0 && !Master.getReady().isEmpty()) {
 					Master.getRunning().remove(0);
 					dispath();
-					current.interrupt();
+					threds.get(process).interrupt();
 					terminated.add(process);
 				}
 				if(process.getProcessTime() >= SLICETIME && !Master.getReady().isEmpty()) {
-					
 					timeRunOut(process);
 					dispath();
 					Master.getReady().add(process);
@@ -54,20 +52,30 @@ public class Checker extends Thread{
 	}
 
 	private synchronized void timeRunOut(Processo p) {
-		Master.getRunning().remove(0);
-		p.setStatus(Estado.READY);
+		if(Master.getKernel() == Master.getRunning().size()) {
+			Master.getRunning().remove(0);
+			p.setStatus(Estado.READY);
+		}
 		p.setProcessTime(0);
-		current.interrupt();
 	}
 	
 	public synchronized void dispath() {
 		Collections.sort(Master.getReady());
-		Processo process = Master.getReady().get(0);
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i = 0; i < Master.getReady().size(); i++) {
+			Processo p = Master.getReady().get(i);
+			for (int j = 0; j < p.getProcessPriority(); j++) {
+				list.add(i);
+			}
+		}
+		int index = list.get((int) Math.random() * Master.getReady().size());
+		Processo process = Master.getReady().get(index);
 		process.setStatus(Estado.RUNNING);
 		Master.getRunning().add(process);
-		Master.getReady().remove(0);
-		current = new Thread(process);
+		Master.getReady().remove(index);
+		Thread current = new Thread(process);
 		current.start();
+		threds.put(process, current);
 	}
 	
 	private synchronized void wakeUp(Processo p) {

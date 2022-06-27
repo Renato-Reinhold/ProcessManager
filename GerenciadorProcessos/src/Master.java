@@ -11,9 +11,15 @@ public class Master implements Runnable{
 	private static List<Processo> ready = new ArrayList<Processo>();
 	private static List<Processo> terminated = new ArrayList<Processo>();
 	private List<Processo> processos;
+	private static int kernel = 2;
 	
 	public Master(List<Processo> processos) {
 		this.processos = processos;
+	}
+	
+	public Master(List<Processo> processos, int kernel) {
+		this.processos = processos;
+		Master.kernel = kernel;
 	}
 	
 	@Override
@@ -52,6 +58,8 @@ public class Master implements Runnable{
 		return ready;
 	}
 
-	
+	public static int getKernel() {
+		return kernel;
+	}
 	
 }

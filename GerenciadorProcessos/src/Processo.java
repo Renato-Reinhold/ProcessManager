@@ -30,7 +30,7 @@ public class Processo implements Runnable, Comparable<Processo> {
 		while (status != Estado.TERMINATED) {
 			try {
 			if (Estado.RUNNING == status) {
-				Thread.sleep((long)(Math.random() * 1000));
+				Thread.sleep((long)(Math.random() * 20000));
 				timeCPU -= 1;
 				this.processTime += 1;
 				if (timeCPU == 0) {
@@ -107,7 +107,7 @@ public class Processo implements Runnable, Comparable<Processo> {
 
 	@Override
 	public String toString() {
-		return "[id:" + id + ", prioridade: " + ProcessPriority + "] \n";
+		return "[id:" + id + ", prioridade: " + ProcessPriority + ", Tempo CPU: " + timeCPU + "] \n";
 	}
 
 }
