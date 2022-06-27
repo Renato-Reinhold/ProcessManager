@@ -1,3 +1,7 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 public class IOChecker extends Thread{
 	
 	@Override
@@ -7,11 +11,10 @@ public class IOChecker extends Thread{
 				|| !Master.getThreds().isEmpty()
 				|| !Master.getWaiting().isEmpty()) {
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {}
 			for (int i = 0; i < Master.getRunning().size(); i++) {
 				Processo p = Master.getRunning().get(i);
-				System.out.println(Master.getThreds().get(p).getState());
 				if(!Master.getWaiting().contains(p) && Master.getThreds().get(p).getState() == State.TIMED_WAITING) {
 					p.setStatus(Estado.WAITING);
 					Master.getWaiting().add(p);
@@ -29,4 +32,10 @@ public class IOChecker extends Thread{
 		
 	}
 	
+	private boolean chancesIO(Processo p) {
+		Random r = new Random();
+		List<Integer> chances = Arrays.asList(1, 1, 0, 0);
+		int i = chances.get(r.nextInt(chances.size()));
+		return i == 1;
+	}
 }

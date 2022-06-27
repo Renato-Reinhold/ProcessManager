@@ -14,7 +14,7 @@ public class Master implements Runnable{
 	private static List<Processo> terminated = new ArrayList<Processo>();
 	private static Map<Processo ,Thread> threds = new HashMap<Processo, Thread>();
 	private List<Processo> processos;
-	private static int kernel = 2;
+	private static int kernel = 3;
 	
 	public Master(List<Processo> processos) {
 		this.processos = processos;
