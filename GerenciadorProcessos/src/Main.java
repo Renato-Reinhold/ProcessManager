@@ -43,7 +43,6 @@ public class Main extends JFrame {
 	private JLabel titleWaiting;
 	
 	private JButton buttonNewProcess;
-	private JButton button;
 	private JButton btnSair;
 	
 	List<Processo> processos;
@@ -66,7 +65,7 @@ public class Main extends JFrame {
 	}
 
 	public static int timeRandom() {
-		return new Random().nextInt(10) + 1;
+		return new Random().nextInt(30) + 1;
 	}	
 	
 	{
@@ -74,12 +73,12 @@ public class Main extends JFrame {
 		
 		Processo p1 = new Processo(Estado.NEW, "Executara um processo padrao", timeRandom());
 		Processo p2 = new Processo(Estado.NEW, "Requisição de um processo de I/O", timeRandom());
-		Processo p3 = new Processo(Estado.WAITING, "Aguardo da I/O que sera executado pelo proceso p2", timeRandom(), p2);
+		Processo p3 = new Processo(Estado.NEW, "Aguardo da I/O que sera executado pelo proceso p2", timeRandom(), p2);
 		Processo p4 = new Processo(Estado.NEW, "TEXTO 6", timeRandom());
 		Processo p5 = new Processo(Estado.NEW, "TEXTO 5", timeRandom());
 		Processo p6 = new Processo(Estado.NEW, "Descrição aleatoria", timeRandom());
-		Processo p7 = new Processo(Estado.WAITING, "Esperando o processo p6 terminar de executar", timeRandom(), p6);
-		Processo p8 = new Processo(Estado.BLOCKED, "Bloqueado pelo processo p7", timeRandom());
+		Processo p7 = new Processo(Estado.NEW, "Esperando o processo p6 terminar de executar", timeRandom(), p6);
+		Processo p8 = new Processo(Estado.NEW, "Bloqueado pelo processo p7", timeRandom());
 		Processo p9 = new Processo(Estado.NEW, "TEXTO 9", timeRandom());
 		Processo p10 = new Processo(Estado.NEW, "TEXTO 10", timeRandom());
 		processos.add(p1);
@@ -92,6 +91,27 @@ public class Main extends JFrame {
 		processos.add(p8);
 		processos.add(p9);
 		processos.add(p10);
+		Processo p11 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p12 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p13 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p14 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p15 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p16 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p17 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p18 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p19 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		Processo p20 = new Processo(Estado.NEW, "TEXTO", timeRandom());
+		
+		processos.add(p11);
+		processos.add(p12);
+		processos.add(p13);
+		processos.add(p14);
+		processos.add(p15);
+		processos.add(p16);
+		processos.add(p17);
+		processos.add(p18);
+		processos.add(p19);
+		processos.add(p20);
 	}
 	
 	/**
@@ -228,14 +248,6 @@ public class Main extends JFrame {
 		gbc_buttonNewProcess.gridx = 0;
 		gbc_buttonNewProcess.gridy = 1;
 		pnlGeral.add(buttonNewProcess, gbc_buttonNewProcess);
-		
-		button = new JButton("Cadastrar Processo");
-		GridBagConstraints gbc_button = new GridBagConstraints();
-		gbc_button.fill = GridBagConstraints.BOTH;
-		gbc_button.insets = new Insets(0, 0, 0, 5);
-		gbc_button.gridx = 1;
-		gbc_button.gridy = 1;
-		pnlGeral.add(button, gbc_button);
 		
 		btnSair = new JButton("Sair");
 		GridBagConstraints gbc_btnSair = new GridBagConstraints();
