@@ -13,6 +13,12 @@ public class IOChecker extends Thread{
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {}
+			for (int i = 0; i < Master.getWaiting().size(); i++) {
+				Processo p = Master.getWaiting().get(i);
+				if (Master.getThreds().get(p) != null && Master.getThreds().get(p).getState() == State.RUNNABLE) {
+					Master.wakeUp(p);
+				}
+			}
 			for (int i = 0; i < Master.getRunning().size(); i++) {
 				Processo p = Master.getRunning().get(i);
 				if(!Master.getWaiting().contains(p) && Master.getThreds().get(p).getState() == State.TIMED_WAITING) {
@@ -20,12 +26,6 @@ public class IOChecker extends Thread{
 					Master.getWaiting().add(p);
 					Master.getRunning().remove(p);
 					Master.dispath();
-				}
-			}
-			for (int i = 0; i < Master.getWaiting().size(); i++) {
-				Processo p = Master.getWaiting().get(i);
-				if (Master.getThreds().get(p) != null && Master.getThreds().get(p).getState() == State.RUNNABLE) {
-					Master.wakeUp(p);
 				}
 			}
 		}

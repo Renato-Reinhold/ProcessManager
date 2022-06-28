@@ -14,7 +14,9 @@ public class Checker extends Thread {
 		Master.dispath();
 		while (!Master.getReady().isEmpty()) {
 			try {
-				Thread.sleep(2000);
+				if (Master.getKernel() >= Master.getRunning().size()) {
+					Thread.sleep(2000);
+				}
 				System.out.println(Master.getReady());
 				if (Master.getRunning().get(0) != null) {
 					Processo process = Master.getRunning().get(0);
@@ -32,12 +34,10 @@ public class Checker extends Thread {
 					}
 				}
 			} catch (InterruptedException e) {
-				
+
 			}
 		}
 
 	}
-
-	
 
 }

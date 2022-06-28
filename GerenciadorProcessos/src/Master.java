@@ -14,7 +14,7 @@ public class Master implements Runnable{
 	private static List<Processo> terminated = new ArrayList<Processo>();
 	private static Map<Processo ,Thread> threds = new HashMap<Processo, Thread>();
 	private List<Processo> processos;
-	private static int kernel = 3;
+	private static int kernel = 2;
 	
 	public Master(List<Processo> processos) {
 		this.processos = processos;
@@ -46,36 +46,36 @@ public class Master implements Runnable{
 	}
 	
 	public static synchronized void timeRunOut(Processo p) {
-		if(getKernel() == Master.getRunning().size()) {
-			getRunning().remove(0);
+		if(getKernel() == running.size()) {
+			running.remove(0);
 			p.setStatus(Estado.READY);
 		}
 		p.setProcessTime(0);
 	}
 	
 	public static synchronized void dispath() {
-		Collections.sort(getReady());
+		Collections.sort(ready);
 		List<Integer> list = new ArrayList<Integer>();
-		for (int i = 0; i < getReady().size(); i++) {
-			Processo p = getReady().get(i);
+		for (int i = 0; i < ready.size(); i++) {
+			Processo p = ready.get(i);
 			for (int j = 0; j < p.getProcessPriority(); j++) {
 				list.add(i);
 			}
 		}
-		int index = list.get((int) Math.random() * getReady().size());
-		Processo process = Master.getReady().get(index);
+		int index = list.get((int) Math.random() * ready.size());
+		Processo process = ready.get(index);
 		process.setStatus(Estado.RUNNING);
-		getRunning().add(process);
-		getReady().remove(index);
+		running.add(process);
+		ready.remove(index);
 		Thread current = new Thread(process);
 		current.start();
-		getThreds().put(process, current);
+		threds.put(process, current);
 	}
 	
 	public static synchronized void wakeUp(Processo p) {
 		p.setStatus(Estado.READY);
-		getReady().add(p);
-		getWaiting().remove(p);
+		ready.add(p);
+		waiting.remove(p);
 	}
 	
 	public static int priorityRandom() {
@@ -105,5 +105,4 @@ public class Master implements Runnable{
 	public static Map<Processo, Thread> getThreds() {
 		return threds;
 	}
-	
 }
