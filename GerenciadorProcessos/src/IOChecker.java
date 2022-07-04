@@ -1,3 +1,7 @@
+//Renato Muller Reinhold
+//Joao Vitor Persuhn
+//Monica Luiza
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;

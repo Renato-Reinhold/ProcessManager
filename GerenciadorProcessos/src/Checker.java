@@ -1,6 +1,6 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+//Renato Muller Reinhold
+//Joao Vitor Persuhn
+//Monica Luiza
 
 public class Checker extends Thread {
 

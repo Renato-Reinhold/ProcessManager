@@ -1,4 +1,6 @@
-
+//Renato Muller Reinhold
+//Joao Vitor Persuhn
+//Monica Luiza
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -72,11 +74,11 @@ public class Main extends JFrame {
 		processos = new Stack<Processo>();
 		
 		Processo p1 = new Processo(Estado.NEW, "Executara um processo padrao", timeRandom());
-		Processo p2 = new Processo(Estado.NEW, "Requisição de um processo de I/O", timeRandom());
+		Processo p2 = new Processo(Estado.NEW, "Requisiï¿½ï¿½o de um processo de I/O", timeRandom());
 		Processo p3 = new Processo(Estado.NEW, "Aguardo da I/O que sera executado pelo proceso p2", timeRandom(), p2);
 		Processo p4 = new Processo(Estado.NEW, "TEXTO 6", timeRandom());
 		Processo p5 = new Processo(Estado.NEW, "TEXTO 5", timeRandom());
-		Processo p6 = new Processo(Estado.NEW, "Descrição aleatoria", timeRandom());
+		Processo p6 = new Processo(Estado.NEW, "Descriï¿½ï¿½o aleatoria", timeRandom());
 		Processo p7 = new Processo(Estado.NEW, "Esperando o processo p6 terminar de executar", timeRandom(), p6);
 		Processo p8 = new Processo(Estado.NEW, "Bloqueado pelo processo p7", timeRandom());
 		Processo p9 = new Processo(Estado.NEW, "TEXTO 9", timeRandom());
